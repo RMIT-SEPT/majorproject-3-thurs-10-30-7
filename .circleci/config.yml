@@ -1,0 +1,29 @@
+version: 2.1
+
+orbs:
+  aws-ecr: circleci/aws-ecr@6.4.0
+  aws-ecs: circleci/aws-ecs@0.0.11
+
+jobs:
+  build:
+    working_directory: ~/BackEnd/SEPT.Team.Seven
+    docker:
+      - image: circleci/openjdk:8-jdk-stretch
+
+    steps:
+      - checkout
+      - restore_cache:
+          key: circleci-sept-team-seven-{{ checksum "pom.xml" }}
+      - run: mvn dependency:go-offline
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: circleci-sept-team-seven-{{ checksum "pom.xml" }}
+      - run: mvn test
+      - run: mvn package
+      - run: docker build -t springio/sept-team-seven .
+      - run: docker run -p 8080:8080 springio/sept-team-seven
+workflows:
+  build_and_test:
+    jobs:
+      - build
