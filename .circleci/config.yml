@@ -1,15 +1,13 @@
 version: 2.1
 
 orbs:
-  aws-ecr: circleci/aws-ecr@6.4.0
-  aws-ecs: circleci/aws-ecs@0.0.11
+  aws-cli: circleci/aws-cli@1.3.0
 
 jobs:
-  build:
+  build_backend:
     working_directory: ~/BackEnd/SEPT.Team.Seven
     docker:
       - image: circleci/openjdk:8-jdk-stretch
-
     steps:
       - checkout
       - restore_cache:
@@ -23,7 +21,35 @@ jobs:
       - run: mvn package
       - run: docker build -t springio/sept-team-seven .
       - run: docker run -p 8080:8080 springio/sept-team-seven
+  build_frontend:
+    working_directory: ~/FrontEnd/appointment-system
+    docker:
+      - image: circleci/node:10.15.0-jessie
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install-npm
+          command: npm ci
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - run:
+          name: test
+          command: npm run test
+      - run:
+          name: build
+          command: npm run build
+      - run:
+          name: build
+          command: aws s3 rm --recursive s3://sept-team-seven-frontend/
+      - run:
+          name: test
+          command: aws s3 cp --recursive ./build s3://sept-team-seven-frontend/
 workflows:
   build_and_test:
     jobs:
-      - build
+      - build_backend
+      - build_frontend
