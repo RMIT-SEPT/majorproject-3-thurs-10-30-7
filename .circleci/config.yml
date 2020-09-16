@@ -19,7 +19,7 @@ jobs:
           name: Setup common environment variables
           command: |
             echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
-            echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWSS_DEFAULT_REGION}"' >> $BASH_ENV
+            echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}"' >> $BASH_ENV
       - restore_cache:
           key: circleci-sept-team-seven-{{ checksum "pom.xml" }}
       - run: mvn install -DskipTests
@@ -49,6 +49,9 @@ jobs:
           command: |
             eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include email)
             docker push $FULL_IMAGE_NAME
+      - run:
+          name: Force Update Existing Service
+          command: aws ecs update-service --cluster ecs-cluster --service circleci-ecs-service --force-new-deployment
   test_backend:
     working_directory: ~/BackEnd/SEPT.Team.Seven
     docker:
