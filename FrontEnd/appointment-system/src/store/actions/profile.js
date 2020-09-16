@@ -360,7 +360,7 @@ export const fetchWorkingTime = (startTime, endTime, token) => {
     };
 
     axios
-      .get("http://localhost:8080/api/workingTIme/employee/" + userId, config)
+      .get("http://localhost:8080/api/workingTime/employee/" + userId, config)
       .then((response) => {
         console.log(response);
         dispatch(fetchWorkingTimeSuccess(response.data));
