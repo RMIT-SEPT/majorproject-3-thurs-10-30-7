@@ -99,6 +99,8 @@ jobs:
       - run:
           name: populate s3 bucket
           command: aws s3 cp --recursive ./build s3://sept-team-seven-frontend/
+      - run: aws configure set preview.cloudfront true
+      - run: aws cloudfront create-invalidation --distribution-id E35KNGR5GZFSOR --paths '/*'
   test_frontend:
     working_directory: ~/FrontEnd/appointment-system
     docker:
