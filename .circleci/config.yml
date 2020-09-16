@@ -60,7 +60,7 @@ jobs:
       - image: circleci/node:10.15.0-jessie
     steps:
       - checkout:
-          path: ~/FrontEnd/appointment-system
+          path: ~/FrontEnd
       - run:
           command: node -e 'const fs = require("fs");fs.readdirSync("./").forEach(file => {console.log(file);});'
       - restore_cache:
