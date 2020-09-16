@@ -5,6 +5,6 @@ WORKDIR /build/
 RUN mvn package
 
 FROM openjdk:8-jdk-alpine
-WORKDIR /aoo
+WORKDIR /app
 COPY --from=MAVEN_BUILD /build/target/SEPT.Team.Seven-0.0.1-SNAPSHOT.jar /app/
 ENTRYPOINT ["java","-jar","SEPT.Team.Seven-0.0.1-SNAPSHOT.jar"]

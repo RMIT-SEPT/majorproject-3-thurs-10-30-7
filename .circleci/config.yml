@@ -102,9 +102,6 @@ workflows:
     jobs:
       - build_backend
       - build_frontend
-    branches:
-      only:
-        - master
   test:
     jobs:
       - test_backend
