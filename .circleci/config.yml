@@ -22,6 +22,7 @@ jobs:
             echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWSS_DEFAULT_REGION}"' >> $BASH_ENV
       - restore_cache:
           key: circleci-sept-team-seven-{{ checksum "pom.xml" }}
+      - run: mvn clean install
       - run: mvn dependency:go-offline
       - save_cache:
           paths:
@@ -108,5 +109,5 @@ jobs:
 workflows:
   build:
     jobs:
-      - build_backend
       - build_frontend
+      - build_backend
