@@ -61,6 +61,7 @@ jobs:
     steps:
       - checkout:
           path: ~/FrontEnd/appointment-system
+      - ls
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
@@ -104,9 +105,4 @@ jobs:
 workflows:
   build:
     jobs:
-      - build_backend
       - build_frontend
-  # test:
-  #   jobs:
-  #     - test_backend
-  #     - test_frontend
