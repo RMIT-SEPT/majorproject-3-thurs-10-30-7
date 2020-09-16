@@ -61,7 +61,7 @@ jobs:
     steps:
       - checkout:
           path: ~/FrontEnd/appointment-system
-      - ls
+      - node -e 'const fs = require("fs");fs.readdirSync("./").forEach(file => {console.log(file);});'
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
