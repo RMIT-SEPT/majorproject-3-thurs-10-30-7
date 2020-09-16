@@ -59,10 +59,6 @@ jobs:
     docker:
       - image: circleci/node:10.15.0-jessie
     steps:
-      - checkout:
-          path: ~/FrontEnd/appointment-system
-      - run:
-          command: cd ~/FrontEnd/appointment-system
       - run:
           command: node -e 'const fs = require("fs");fs.readdirSync("./").forEach(file => {console.log(file);});'
       - restore_cache:
