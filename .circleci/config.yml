@@ -19,8 +19,7 @@ jobs:
           command: |
             echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
             echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWSS_DEFAULT_REGION}"' >> $BASH_ENV
-      - run: cd ./BackEnd/SEPT.Team.Seven
-      - run: ls
+      - run: cd ./BackEnd/SEPT.Team.Seven && ls
       - restore_cache:
           key: circleci-sept-team-seven-{{ checksum "pom.xml" }}
       - run: mvn dependency:go-offline
