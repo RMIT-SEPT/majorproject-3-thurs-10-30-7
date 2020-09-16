@@ -47,6 +47,7 @@ jobs:
     steps:
       - checkout:
           path: ~/BackEnd/SEPT.Team.Seven
+      - run: mv ./BackEnd/SEPT.Team.Seven/* ./
       - restore_cache:
           key: circleci-sept-team-seven-{{ checksum "pom.xml" }}
       - run: mvn dependency:go-offline
@@ -61,9 +62,8 @@ jobs:
       - image: circleci/node:10.15.0-jessie
     steps:
       - checkout:
-          path: ~/FrontEnd
-      - run:
-          command: node -e 'const fs = require("fs");fs.readdirSync("./").forEach(file => {console.log(file);});'
+          path: ~/FrontEnd/appointment-system
+      - run: mv ./FrontEnd/appointment-system/* ./
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
@@ -92,6 +92,7 @@ jobs:
     steps:
       - checkout:
           path: ~/FrontEnd/appointment-system
+      - run: mv ./FrontEnd/appointment-system/* ./
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
@@ -108,3 +109,4 @@ workflows:
   build:
     jobs:
       - build_backend
+      - build_frontend
