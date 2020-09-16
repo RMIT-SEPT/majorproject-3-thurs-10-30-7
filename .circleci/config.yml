@@ -11,6 +11,7 @@ jobs:
       - image: circleci/openjdk:8-jdk
     steps:
       - checkout
+          path: ~/BackEnd/SEPT.Team.Seven
       - setup_remote_docker
       - run:
           name: Setup common environment variables
@@ -42,6 +43,7 @@ jobs:
       - image: circleci/openjdk:8-jdk-stretch
     steps:
       - checkout
+          path: ~/BackEnd/SEPT.Team.Seven
       - restore_cache:
           key: circleci-sept-team-seven-{{ checksum "pom.xml" }}
       - run: mvn dependency:go-offline
@@ -55,6 +57,7 @@ jobs:
       - image: circleci/node:10.15.0-jessie
     steps:
       - checkout
+          path: ~/FrontEnd/appointment-system
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
@@ -81,6 +84,7 @@ jobs:
       - image: circleci/node:10.15.0-jessie
     steps:
       - checkout
+          path: ~/FrontEnd/appointment-system
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
