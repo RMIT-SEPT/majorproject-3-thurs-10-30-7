@@ -12,7 +12,7 @@ jobs:
       - image: circleci/openjdk:8-jdk
     steps:
       - checkout:
-          path: ~/BackEnd/SEPT.Team.Seven
+          path: ~/BackEnd
       - setup_remote_docker
       - run:
           name: Setup common environment variables
@@ -106,4 +106,4 @@ jobs:
 workflows:
   build:
     jobs:
-      - build_frontend
+      - build_backend
