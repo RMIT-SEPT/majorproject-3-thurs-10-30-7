@@ -7,7 +7,7 @@ orbs:
 
 jobs:
   build_backend:
-    working_directory: ./BackEnd/SEPT.Team.Seven
+    working_directory: BackEnd/SEPT.Team.Seven
     docker:
       - image: circleci/openjdk:8-jdk
     steps:
@@ -39,7 +39,7 @@ jobs:
             eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include email)
             docker push $FULL_IMAGE_NAME
   test_backend:
-    working_directory: ./BackEnd/SEPT.Team.Seven
+    working_directory: BackEnd/SEPT.Team.Seven
     docker:
       - image: circleci/openjdk:8-jdk-stretch
     steps:
@@ -53,7 +53,7 @@ jobs:
           key: circleci-sept-team-seven-{{ checksum "pom.xml" }}
       - run: mvn test
   build_frontend:
-    working_directory: ./FrontEnd/appointment-system
+    working_directory: FrontEnd/appointment-system
     docker:
       - image: circleci/node:10.15.0-jessie
     steps:
@@ -80,7 +80,7 @@ jobs:
           name: test
           command: aws s3 cp --recursive ./build s3://sept-team-seven-frontend/
   test_frontend:
-    working_directory: ./FrontEnd/appointment-system
+    working_directory: FrontEnd/appointment-system
     docker:
       - image: circleci/node:10.15.0-jessie
     steps:
