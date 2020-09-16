@@ -7,10 +7,10 @@ orbs:
 
 jobs:
   build_backend:
-    working_directory: BackEnd/SEPT.Team.Seven
     docker:
       - image: circleci/openjdk:8-jdk
     steps:
+      - cd BackEnd/SEPT.Team.Seven
       - checkout
       - setup_remote_docker
       - run:
@@ -53,10 +53,10 @@ jobs:
           key: circleci-sept-team-seven-{{ checksum "pom.xml" }}
       - run: mvn test
   build_frontend:
-    working_directory: FrontEnd/appointment-system
     docker:
       - image: circleci/node:10.15.0-jessie
     steps:
+      - cd FrontEnd/appointment-system
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
