@@ -9,6 +9,7 @@ jobs:
     working_directory: ~/BackEnd/SEPT.Team.Seven
     docker:
       - image: circleci/openjdk:8-jdk
+      - image: circleci/mysql:latest
     steps:
       - checkout:
           path: ~/BackEnd/SEPT.Team.Seven
@@ -21,12 +22,13 @@ jobs:
             echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWSS_DEFAULT_REGION}"' >> $BASH_ENV
       - restore_cache:
           key: circleci-sept-team-seven-{{ checksum "pom.xml" }}
-      - run: mvn clean install
+      - run: mvn install -DskipTests
       - run: mvn dependency:go-offline
       - save_cache:
           paths:
             - ~/.m2
           key: circleci-sept-team-seven-{{ checksum "pom.xml" }}
+      - run: mvn test
       - run: mvn package
       - store_test_results:
           path: target/surefire-reports
@@ -57,6 +59,7 @@ jobs:
       - run: mv ./BackEnd/SEPT.Team.Seven/* ./
       - restore_cache:
           key: circleci-sept-team-seven-{{ checksum "pom.xml" }}
+      - run: mvn install -DskipTests
       - run: mvn dependency:go-offline
       - save_cache:
           paths:
