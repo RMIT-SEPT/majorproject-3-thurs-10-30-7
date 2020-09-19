@@ -15,6 +15,7 @@ export const NavigationItems = (props) => {
         <NavigationItem link="/howitworks">How It Works</NavigationItem>
         <NavigationItem link="/contact">Contact</NavigationItem>
         <NavigationItem link="/employees">Employees</NavigationItem>
+        <NavigationItem link="/workingtimes">Working Times</NavigationItem>
         <NavigationItem link="/profile">Profile</NavigationItem>
         <NavigationItem link="/logout">Log Out</NavigationItem>
       </ul>
@@ -28,6 +29,7 @@ export const NavigationItems = (props) => {
         <NavigationItem link="/about">About</NavigationItem>
         <NavigationItem link="/howitworks">How It Works</NavigationItem>
         <NavigationItem link="/contact">Contact</NavigationItem>
+        <NavigationItem link="/availabilities">Availabilities</NavigationItem>
         <NavigationItem link="/profile">Profile</NavigationItem>
         <NavigationItem link="/logout">Log Out</NavigationItem>
       </ul>

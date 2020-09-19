@@ -1,8 +1,13 @@
 package SEPT.Team.Seven.apiTests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,14 +16,16 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.util.NestedServletException;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import SEPT.Team.Seven.advice.ConstraintViolationHandler;
+import SEPT.Team.Seven.repo.AdminRepository;
 
 
 @SpringBootTest
@@ -30,7 +37,7 @@ public class AdminAPITests
 	private WebApplicationContext webApplicationContext;
 	 
 	@BeforeEach
-	public void initialise()
+	public void setUp()
 	{
 		mockMvc =  MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(SecurityMockMvcConfigurers.springSecurity())
@@ -114,4 +121,50 @@ public class AdminAPITests
 				  .andExpect(MockMvcResultMatchers.status().is4xxClientError())
 				  .andExpect(MockMvcResultMatchers.status().reason("Access Denied"));
 	}
+	
+	@Test
+	@WithMockUser(username="admin",roles={"ADMIN"})
+	public void updateAdmin_ValidData_ReturnsNothing() throws Exception
+	{
+		//Arrange
+		JSONObject requestBody = new JSONObject(); 
+		requestBody.put("firstName", "Juan");
+		requestBody.put("lastName", "Yega");
+		requestBody.put("email", "juan@hotmail.com");
+		requestBody.put("phoneNo", "1234567891");
+		requestBody.put("address", "updated address");
+		
+		//Act and Assert
+		this.mockMvc.perform(MockMvcRequestBuilders
+			      .put("/api/admins/5")
+			      .content(requestBody.toString())
+			      .contentType(MediaType.APPLICATION_JSON))
+				  .andDo(MockMvcResultHandlers.print())
+				  .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+	}
+	
+	@Test
+	@WithMockUser(username="admin",roles={"ADMIN"})
+	public void updateAdmin_InvalidData_ThrowsError() throws Exception
+	{
+		//Arrange
+		JSONObject requestBody = new JSONObject(); 
+		requestBody.put("firstName", "Juan");
+		requestBody.put("lastName", "Yega");
+		requestBody.put("email", "juan@hotmail.com");
+		requestBody.put("phoneNo", "1234abc");
+		requestBody.put("address", "updated addressss");
+
+		//Act and Assert
+		 Assertions.assertThrows(NestedServletException.class, () -> {
+				this.mockMvc.perform(MockMvcRequestBuilders
+					      .put("/api/admins/5")
+					      .content(requestBody.toString())
+					      .contentType(MediaType.APPLICATION_JSON))
+						  .andDo(MockMvcResultHandlers.print())
+						  .andExpect(MockMvcResultMatchers.status().is5xxServerError());
+			  });
+		
+	}
+	
 }

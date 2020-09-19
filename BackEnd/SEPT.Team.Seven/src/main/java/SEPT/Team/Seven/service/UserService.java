@@ -56,12 +56,13 @@ public class UserService {
 		this.jwtProvider = jwtProvider;
 	}
 
-//    public Authentication signin(String username, String password) {
-//        return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-//    }
-
 	public Optional<String> signin(String username, String password) {
 		LOGGER.info("Using logging in");
+		
+		if(isNullOrEmpty(username) || isNullOrEmpty(password)) {
+			return Optional.empty();
+		}
+		
 		Optional<String> token = Optional.empty();
 		Optional<User> user = userRepository.findByUsername(username);
 		if (user.isPresent()) {
@@ -74,7 +75,7 @@ public class UserService {
 				} else if (user.get().getRole().getRoleName().equals("ROLE_EMPLOYEE")) {
 					token = Optional.of(jwtProvider.createToken(username, roles, user.get().getEmployee().getId()));
 				} else if (user.get().getRole().getRoleName().equals("ROLE_ADMIN")) {
-					System.out.println("User Role: " + user.get().getRole().getRoleName());
+//					System.out.println("User Role: " + user.get().getRole().getRoleName());
 					token = Optional.of(jwtProvider.createToken(username, roles, user.get().getAdmin().getId()));
 				}
 
@@ -85,7 +86,6 @@ public class UserService {
 		return token;
 
 	}
-
 	// String firstName, String lastName, String email, String phoneNo, String
 	// address
 	// User(String username, String password, Customer customer, Employee employee,
@@ -97,18 +97,17 @@ public class UserService {
 			Optional<Role> role = null;
 			if (type.equals("customers")) {
 				role = roleRepository.findByRoleName("ROLE_CUSTOMER");
-				Customer customer = customerRepository.save(new Customer("", "", "", "", ""));
+				Customer customer = customerRepository.save(new Customer("placeholder","placeholder","placeholder@placeholder.placeholder","0123456789","placeholder"));
 				return Optional.of(userRepository
 						.save(new User(username, this.passwordEncoder.encode(password), customer, null, null, role.get())));
 			}
 			if (type.equals("employees")) {
 				role = roleRepository.findByRoleName("ROLE_EMPLOYEE");
-				Employee employee = employeeRepository.save(new Employee("", "", "", "", ""));
+				Employee employee = employeeRepository.save(new Employee("placeholder","placeholder","placeholder@placeholder.placeholder","0123456789","placeholder"));
 				return Optional.of(userRepository
 						.save(new User(username, this.passwordEncoder.encode(password), null, employee, null, role.get())));
 			}
-
-			
+      
 		}
 		return Optional.empty();
 	}
@@ -129,5 +128,9 @@ public class UserService {
 
 	public List<User> getAll() {
 		return userRepository.findAll();
+	}
+	
+	private boolean isNullOrEmpty(String value) {
+		return (value == null || value.isEmpty());
 	}
 }
