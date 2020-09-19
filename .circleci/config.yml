@@ -9,7 +9,6 @@ jobs:
     working_directory: ~/BackEnd/SEPT.Team.Seven
     docker:
       - image: circleci/openjdk:8-jdk
-      - image: circleci/mysql:latest
     steps:
       - checkout:
           path: ~/BackEnd/SEPT.Team.Seven
@@ -18,8 +17,7 @@ jobs:
       - run:
           name: Setup common environment variables
           command: |
-            echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
-            echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}"' >> $BASH_ENV
+            echo 'export ECR_REPOSITORY_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/"' >> $BASH_ENV
       - restore_cache:
           key: circleci-sept-team-seven-{{ checksum "pom.xml" }}
       - run: mvn install -DskipTests
@@ -33,7 +31,7 @@ jobs:
       - store_test_results:
           path: target/surefire-reports
       - store_artifacts:
-          path: target/SEPT.Team.Seven-0.0.1-SNAPSHOT.jar
+          path: target/sept-team-seven-0.0.1-SNAPSHOT.jar
       - run:
           name: Install dependencies for AWS
           command: |
@@ -43,15 +41,15 @@ jobs:
             sudo pip3 install --upgrade awscli
       - run:
           name: Build docker image
-          command: docker build -t $FULL_IMAGE_NAME .
-      - run: 
+          command: docker build -t $AWS_RESOURCE_NAME_PREFIX .
+      - run:
+          name: Docker tag
+          command: docker tag ${AWS_RESOURCE_NAME_PREFIX}:latest ${ECR_REPOSITORY_NAME}${AWS_RESOURCE_NAME_PREFIX}:latest
+      - run:
           name: Push Docker image
           command: |
-            eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include email)
-            docker push $FULL_IMAGE_NAME
-      - run:
-          name: Force Update Existing Service
-          command: aws ecs update-service --cluster ecs-cluster --service circleci-ecs-service --force-new-deployment
+            eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+            docker push ${ECR_REPOSITORY_NAME}${AWS_RESOURCE_NAME_PREFIX}:latest
   test_backend:
     working_directory: ~/BackEnd/SEPT.Team.Seven
     docker:
