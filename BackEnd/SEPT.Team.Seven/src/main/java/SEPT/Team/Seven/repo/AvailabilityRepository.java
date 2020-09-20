@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import SEPT.Team.Seven.model.Availability;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://d2maztjzxux6f3.cloudfront.net")
 public interface AvailabilityRepository extends JpaRepository<Availability, Integer>{
 	Optional<Availability> findByEmployeeId(int employeeId);
 	

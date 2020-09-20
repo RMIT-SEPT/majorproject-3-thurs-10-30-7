@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import SEPT.Team.Seven.model.User;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://d2maztjzxux6f3.cloudfront.net")
 public interface UserRepository extends JpaRepository<User,Integer>{
     Optional<User> findByUsername(String userName);
 

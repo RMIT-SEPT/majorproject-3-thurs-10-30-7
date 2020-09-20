@@ -25,14 +25,14 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 	
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "http://d2maztjzxux6f3.cloudfront.net")
 	@GetMapping("/next7DaysAvai/{id}")
 	public List<Availability> getNext7DaysAvailabilitiesById(@PathVariable("id") int id) {
 		List<Availability> availabilities = employeeService.getNext7DaysAvailabilitiesById(id);
 		return availabilities;
 	}
 	
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "http://d2maztjzxux6f3.cloudfront.net")
 	@PostMapping("/services")
 	public Service addServiceById(@RequestBody ServiceDTO serviceDTO) {
 	    return employeeService.addServiceByName(serviceDTO.getEmployeeId(), serviceDTO.getServiceName()).orElseThrow(()->

@@ -24,21 +24,21 @@ public class BookingController {
 	@Autowired
 	private BookingService bookingService;
 	
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "http://d2maztjzxux6f3.cloudfront.net")
 	@GetMapping("/customer/{id}")
 	public List<Booking> getBookingsForCustomer(@PathVariable("id") int id) {
 		List<Booking> bookings = bookingService.getBookingsForCustomer(id);
 		return bookings;
 	}
 	
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "http://d2maztjzxux6f3.cloudfront.net")
 	@GetMapping("/employee/{id}")
 	public List<Booking> getBookingsForEmployee(@PathVariable("id") int id) {
 		List<Booking> bookings = bookingService.getBookingsForEmployee(id);
 		return bookings;
 	}
 	
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "http://d2maztjzxux6f3.cloudfront.net")
     @PostMapping()
     public Booking addBooking(@RequestBody BookingDto bookingDto) {
        return bookingService.addBooking(bookingDto.getEmployeeId(), bookingDto.getCustomerId(),
