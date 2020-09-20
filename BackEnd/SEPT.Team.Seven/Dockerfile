@@ -6,5 +6,5 @@ RUN mvn package
 
 FROM openjdk:8-jdk-alpine
 WORKDIR /app
-COPY /build/target/SEPT.Team.Seven-0.0.1-SNAPSHOT.jar /app/
+COPY /target/SEPT.Team.Seven-0.0.1-SNAPSHOT.jar /app/
 ENTRYPOINT ["java","-jar","SEPT.Team.Seven-0.0.1-SNAPSHOT.jar"]
