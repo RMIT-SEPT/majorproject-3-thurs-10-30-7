@@ -52,7 +52,10 @@ class Login extends Component {
       [controlName]: {
         ...this.state.controls[controlName],
         value: event.target.value,
-        valid: checkValidity(event.target.value, this.state.controls[controlName].validation),
+        valid: checkValidity(
+          event.target.value,
+          this.state.controls[controlName].validation
+        ),
         touched: true,
       },
     };
@@ -63,7 +66,10 @@ class Login extends Component {
   // Runs when submitted and calls the redux action
   loginHandler = (event) => {
     event.preventDefault();
-    console.log(this.state.controls.username.value, this.state.controls.password.value);
+    console.log(
+      this.state.controls.username.value,
+      this.state.controls.password.value
+    );
     this.props.onAuthentication(
       this.state.controls.username.value,
       this.state.controls.password.value,
@@ -116,7 +122,7 @@ class Login extends Component {
       <div>
         {authRedirect}
         <form onSubmit={this.loginHandler}>
-          <div className="form-group">
+          <div className="form-group container">
             {form}
             {errorMessage}
             <Button classes="btn btn-primary">SUBMIT</Button>
@@ -138,7 +144,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAuthentication: (username, password, isSignUp) => dispatch(actions.auth(username, password, isSignUp)),
+    onAuthentication: (username, password, isSignUp) =>
+      dispatch(actions.auth(username, password, isSignUp)),
     onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath("/")),
   };
 };

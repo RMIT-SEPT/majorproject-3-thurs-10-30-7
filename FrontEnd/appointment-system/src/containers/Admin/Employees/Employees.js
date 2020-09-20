@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 import Spinner from "../../../components/UI/Spinner/Spinner";
+import Button from "../../../components/UI/Button/Button";
+
+import * as actions from "../../../store/actions/actions";
 
 export class Employees extends Component {
   state = {
@@ -39,6 +42,11 @@ export class Employees extends Component {
       });
   }
 
+  addService = (employeeId) => {
+    this.props.addService(employeeId);
+    this.props.history.push("/addservice");
+  };
+
   render() {
     let employees = null;
 
@@ -52,6 +60,14 @@ export class Employees extends Component {
             <td>{employee.email}</td>
             <td>{employee.phoneNo}</td>
             <td>{employee.address}</td>
+            <td>
+              <Button
+                clicked={() => this.addService(employee.id)}
+                classes="btn btn-primary"
+              >
+                Add Service(s)
+              </Button>
+            </td>
           </tr>
         );
       });
@@ -66,7 +82,7 @@ export class Employees extends Component {
     }
 
     return (
-      <React.Fragment>
+      <div className="container">
         <br />
         <h3>Employees</h3>
         <Link className="btn btn-secondary btn-sm" to="/addemployee">
@@ -83,12 +99,12 @@ export class Employees extends Component {
               <th>Email</th>
               <th>Phone No.</th>
               <th>Address</th>
-              <th></th>
+              <th>Add Service</th>
             </tr>
           </thead>
           <tbody>{employees}</tbody>
         </table>
-      </React.Fragment>
+      </div>
     );
   }
 }
@@ -96,7 +112,14 @@ export class Employees extends Component {
 const mapStateToProps = (state) => {
   return {
     token: state.auth.token,
+    employeeId: state.service.employeeId,
   };
 };
 
-export default connect(mapStateToProps)(Employees);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addService: (employeeId) => dispatch(actions.updateEmployeeId(employeeId)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Employees);

@@ -141,7 +141,10 @@ export class AddEmployee extends Component {
         [controlName]: {
           ...this.state.controls[controlName],
           value: event.target.value,
-          valid: checkValidity(event.target.value, this.state.controls[controlName].validation),
+          valid: checkValidity(
+            event.target.value,
+            this.state.controls[controlName].validation
+          ),
           touched: true,
         },
       };
@@ -202,7 +205,10 @@ export class AddEmployee extends Component {
           touched={formElement.config.touched}
         />
         {formElement.config.valid ? null : (
-          <ErrorMessage key={formElement.id + "Error"} message={errorMessageToDisplay(formElement.id)} />
+          <ErrorMessage
+            key={formElement.id + "Error"}
+            message={errorMessageToDisplay(formElement.id)}
+          />
         )}
       </React.Fragment>
     ));
@@ -227,17 +233,24 @@ export class AddEmployee extends Component {
     //displays error message beneath the submit button
     let errorMsg = null;
     if (!this.state.isFormValid) {
-      errorMsg = <p className="text-danger">Please make sure all fields are filled and valid.</p>;
+      errorMsg = (
+        <p className="text-danger">
+          Please make sure all fields are filled and valid.
+        </p>
+      );
     }
 
     return (
       <div>
         {authRedirect}
         <form onSubmit={this.addProfileHandler}>
-          <div className="form-group">
+          <div className="form-group container">
             {form}
             {errorMessage}
-            <Button disabled={!this.state.isFormValid} classes="btn btn-primary">
+            <Button
+              disabled={!this.state.isFormValid}
+              classes="btn btn-primary"
+            >
               Submit
             </Button>
             {errorMsg}
@@ -259,7 +272,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAddNewProfile: (formData, history, token) => dispatch(actions.addProfile(formData, history, "employees", token)),
+    onAddNewProfile: (formData, history, token) =>
+      dispatch(actions.addProfile(formData, history, "employees", token)),
   };
 };
 
